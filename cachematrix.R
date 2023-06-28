@@ -23,3 +23,24 @@ makeCacheMatrix <- function(x = matrix()) {  # Default argument is an empty matr
        setinverse = setinverse,
        getinverse = getinverse)
 }
+
+
+# This function computes the inverse of a special "matrix" object created by the 'makeCacheMatrix' function.
+cacheinverse <- function(x, ...) {  # 'x' is expected to be a 'makeCacheMatrix' object
+  
+  inv <- x$getinverse()  # Try to get the inverse from the cache
+  
+  # If the cached inverse is not NULL, it has been computed before
+  if(!is.null(inv)) {
+    message("getting cached data")  # Print a message indicating that the cached inverse is being used
+    return(inv)  # Return the cached inverse
+  }
+  
+  # If the cached inverse is NULL, it has not been computed before
+  matrix_to_invert <- x$get()  # Get the matrix from the 'makeCacheMatrix' object
+  inv <- solve(matrix_to_invert, ...)  # Compute the inverse of the matrix
+  
+  x$setinverse(inv)  # Store the computed inverse in the cache
+  
+  inv  # Return the computed inverse
+}
